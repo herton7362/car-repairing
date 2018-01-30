@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
  * @since 1.0.0
  */
 @Entity
-@ApiModel("配件")
+@ApiModel("零件")
 public class Parts extends BaseEntity {
     @ApiModelProperty(value = "配件分类")
     @ManyToOne(fetch = FetchType.EAGER)

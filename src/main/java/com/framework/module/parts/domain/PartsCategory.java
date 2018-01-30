@@ -1,13 +1,12 @@
 package com.framework.module.parts.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kratos.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * 配件分类
@@ -15,7 +14,7 @@ import javax.persistence.ManyToOne;
  * @since 1.0.0
  */
 @Entity
-@ApiModel("配件分类")
+@ApiModel("零件分类")
 public class PartsCategory extends BaseEntity {
     @ApiModelProperty(value = "上级分类")
     @ManyToOne(fetch = FetchType.EAGER)
@@ -23,6 +22,10 @@ public class PartsCategory extends BaseEntity {
     @ApiModelProperty(value = "商品分类名称")
     @Column(length = 50)
     private String name;
+    @ApiModelProperty(value = "零件")
+    @OneToMany(mappedBy = "category")
+    @JsonIgnore
+    private List<Parts> parts;
 
     public PartsCategory getParent() {
         return parent;
@@ -38,5 +41,13 @@ public class PartsCategory extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Parts> getParts() {
+        return parts;
+    }
+
+    public void setParts(List<Parts> parts) {
+        this.parts = parts;
     }
 }

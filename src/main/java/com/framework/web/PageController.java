@@ -73,11 +73,4 @@ public class PageController {
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
-    /**
-     * 首页
-     */
-    @RequestMapping(value = "/**",method = RequestMethod.OPTIONS)
-    public ResponseEntity<?> allowOptions() {
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }
