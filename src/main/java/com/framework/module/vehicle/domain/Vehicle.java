@@ -26,6 +26,15 @@ public class Vehicle extends BaseEntity {
     private Member member;
     @ApiModelProperty(value = "是否默认")
     private Boolean isDefault;
+    @ApiModelProperty(value = "车牌号")
+    @Column(length = 10)
+    private String plateNumber;
+    @ApiModelProperty(value = "引擎号")
+    @Column(length = 50)
+    private String engineNumber;
+    @ApiModelProperty(value = "车架号")
+    @Column(length = 50)
+    private String frameNumber;
 
     public VehicleCategory getVehicleCategory() {
         return vehicleCategory;
@@ -65,5 +74,37 @@ public class Vehicle extends BaseEntity {
 
     public void setIsDefault(Boolean aDefault) {
         isDefault = aDefault;
+    }
+
+    public Boolean getDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(Boolean aDefault) {
+        isDefault = aDefault;
+    }
+
+    public String getPlateNumber() {
+        return plateNumber;
+    }
+
+    public void setPlateNumber(String plateNumber) {
+        this.plateNumber = plateNumber;
+    }
+
+    public String getEngineNumber() {
+        return engineNumber;
+    }
+
+    public void setEngineNumber(String engineNumber) {
+        this.engineNumber = engineNumber;
+    }
+
+    public String getFrameNumber() {
+        return frameNumber;
+    }
+
+    public void setFrameNumber(String frameNumber) {
+        this.frameNumber = frameNumber;
     }
 }
