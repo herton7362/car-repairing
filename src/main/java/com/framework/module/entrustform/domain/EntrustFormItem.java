@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 @Entity
 @ApiModel("委托书维修项目")
 public class EntrustFormItem extends BaseEntity {
-    @ApiModelProperty(value = "车辆")
+    @ApiModelProperty(value = "维修项目")
     @ManyToOne(fetch = FetchType.EAGER)
     private MaintenanceItem maintenanceItem;
     @ApiModelProperty(value = "委托书")

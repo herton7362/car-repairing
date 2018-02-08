@@ -1,7 +1,6 @@
-package com.framework.module.entrustform.domain;
+package com.framework.module.maintenance.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.framework.module.maintenance.domain.MaintenanceItem;
 import com.framework.module.parts.domain.Parts;
 import com.kratos.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
@@ -13,18 +12,18 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
 @Entity
-@ApiModel("委托书所需零件")
-public class EntrustFormParts extends BaseEntity {
+@ApiModel("维修项目所需零件")
+public class MaintenanceItemParts extends BaseEntity {
     @ApiModelProperty(value = "零件")
     @ManyToOne(fetch = FetchType.EAGER)
     private Parts parts;
-    @ApiModelProperty(value = "委托书")
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
-    private EntrustForm entrustForm;
     @ApiModelProperty(value = "数量")
     @Column(length = 11, precision = 2)
     private Double count;
+    @ApiModelProperty(value = "项目")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference
+    private MaintenanceItem maintenanceItem;
 
     public Parts getParts() {
         return parts;
@@ -34,19 +33,19 @@ public class EntrustFormParts extends BaseEntity {
         this.parts = parts;
     }
 
-    public EntrustForm getEntrustForm() {
-        return entrustForm;
-    }
-
-    public void setEntrustForm(EntrustForm entrustForm) {
-        this.entrustForm = entrustForm;
-    }
-
     public Double getCount() {
         return count;
     }
 
     public void setCount(Double count) {
         this.count = count;
+    }
+
+    public MaintenanceItem getMaintenanceItem() {
+        return maintenanceItem;
+    }
+
+    public void setMaintenanceItem(MaintenanceItem maintenanceItem) {
+        this.maintenanceItem = maintenanceItem;
     }
 }

@@ -13,17 +13,17 @@ import javax.persistence.ManyToOne;
 @Entity
 @ApiModel("车")
 public class Vehicle extends BaseEntity {
-    @ApiModelProperty(value = "上级分类")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private VehicleCategory vehicleCategory;
+    @ApiModelProperty(value = "车型id")
+    @Column(length = 36)
+    private String vehicleCategoryId;
     @ApiModelProperty(value = "发动机排量")
     @Column(length = 50)
     private String engineDisplacement;
     @ApiModelProperty(value = "生产年份")
     private Integer productionYear;
     @ApiModelProperty(value = "会员")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Member member;
+    @Column(length = 36)
+    private String memberId;
     @ApiModelProperty(value = "是否默认")
     private Boolean isDefault;
     @ApiModelProperty(value = "车牌号")
@@ -36,12 +36,12 @@ public class Vehicle extends BaseEntity {
     @Column(length = 50)
     private String frameNumber;
 
-    public VehicleCategory getVehicleCategory() {
-        return vehicleCategory;
+    public String getVehicleCategoryId() {
+        return vehicleCategoryId;
     }
 
-    public void setVehicleCategory(VehicleCategory vehicleCategory) {
-        this.vehicleCategory = vehicleCategory;
+    public void setVehicleCategoryId(String vehicleCategoryId) {
+        this.vehicleCategoryId = vehicleCategoryId;
     }
 
     public String getEngineDisplacement() {
@@ -60,12 +60,12 @@ public class Vehicle extends BaseEntity {
         this.productionYear = productionYear;
     }
 
-    public Member getMember() {
-        return member;
+    public String getMemberId() {
+        return memberId;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public Boolean getIsDefault() {

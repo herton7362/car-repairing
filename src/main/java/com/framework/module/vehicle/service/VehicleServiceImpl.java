@@ -5,6 +5,7 @@ import com.framework.module.vehicle.domain.VehicleRepository;
 import com.kratos.common.AbstractCrudService;
 import com.kratos.common.PageRepository;
 import com.kratos.exceptions.BusinessException;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +25,13 @@ public class VehicleServiceImpl extends AbstractCrudService<Vehicle> implements 
 
     @Override
     public Vehicle save(Vehicle vehicle) throws Exception {
-        if(vehicle.getMember() == null) {
+        if(StringUtils.isBlank(vehicle.getMemberId())) {
             throw new BusinessException("会员不能为空");
         }
         // 如果当前车是默认，则将其他的车改为非默认
         if(vehicle.getIsDefault()) {
             Map<String, String[]> param = new HashMap<>();
-            param.put("member.id", new String[]{vehicle.getMember().getId()});
+            param.put("member.id", new String[]{vehicle.getMemberId()});
             List<Vehicle> vehicles = this.findAll(param);
             vehicles.forEach(vehicle1 -> vehicle1.setIsDefault(false));
             vehicleRepository.save(vehicles);

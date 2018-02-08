@@ -1,5 +1,6 @@
 package com.framework.module.entrustform.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.framework.module.vehicle.domain.Vehicle;
 import com.kratos.entity.BaseEntity;
 import com.kratos.module.auth.domain.Admin;
@@ -8,6 +9,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -23,27 +25,32 @@ public class EntrustForm extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private Admin creator;
     @ApiModelProperty(value = "进场时间")
-    private Long approachDate;
-    @ApiModelProperty(value = "保险公司")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Dictionary insuranceCompany;
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")
+    private Date approachDate;
+    @ApiModelProperty(value = "保险公司（字典表）")
+    @Column(length = 36)
+    private String insuranceCompanyId;
     @ApiModelProperty(value = "计划完工时间")
-    private Long planFinishDate;
-    @ApiModelProperty(value = "接车员")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Admin operator;
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")
+    private Date planFinishDate;
+    @ApiModelProperty(value = "接车员（admin表）")
+    @Column(length = 36)
+    private String operatorId;
     @ApiModelProperty(value = "公里数")
     @Column(length = 11, precision = 2)
     private Double kilometres;
-    @ApiModelProperty(value = "业务员")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Admin clerk;
+    @ApiModelProperty(value = "业务员（admin表）")
+    @Column(length = 36)
+    private String clerkId;
     @ApiModelProperty(value = "维修项目")
     @OneToMany(mappedBy = "entrustForm")
     private List<EntrustFormItem> items;
     @ApiModelProperty(value = "所需零件")
     @OneToMany(mappedBy = "entrustForm")
     private List<EntrustFormParts> partses;
+    @ApiModelProperty(value = "联系电话")
+    @Column(length = 20)
+    private String contactTel;
 
     public String getOrderNumber() {
         return orderNumber;
@@ -69,36 +76,28 @@ public class EntrustForm extends BaseEntity {
         this.creator = creator;
     }
 
-    public Long getApproachDate() {
+    public Date getApproachDate() {
         return approachDate;
     }
 
-    public void setApproachDate(Long approachDate) {
+    public void setApproachDate(Date approachDate) {
         this.approachDate = approachDate;
     }
 
-    public Dictionary getInsuranceCompany() {
-        return insuranceCompany;
-    }
-
-    public void setInsuranceCompany(Dictionary insuranceCompany) {
-        this.insuranceCompany = insuranceCompany;
-    }
-
-    public Long getPlanFinishDate() {
+    public Date getPlanFinishDate() {
         return planFinishDate;
     }
 
-    public void setPlanFinishDate(Long planFinishDate) {
+    public void setPlanFinishDate(Date planFinishDate) {
         this.planFinishDate = planFinishDate;
     }
 
-    public Admin getOperator() {
-        return operator;
+    public String getInsuranceCompanyId() {
+        return insuranceCompanyId;
     }
 
-    public void setOperator(Admin operator) {
-        this.operator = operator;
+    public void setInsuranceCompanyId(String insuranceCompanyId) {
+        this.insuranceCompanyId = insuranceCompanyId;
     }
 
     public Double getKilometres() {
@@ -109,12 +108,20 @@ public class EntrustForm extends BaseEntity {
         this.kilometres = kilometres;
     }
 
-    public Admin getClerk() {
-        return clerk;
+    public String getOperatorId() {
+        return operatorId;
     }
 
-    public void setClerk(Admin clerk) {
-        this.clerk = clerk;
+    public void setOperatorId(String operatorId) {
+        this.operatorId = operatorId;
+    }
+
+    public String getClerkId() {
+        return clerkId;
+    }
+
+    public void setClerkId(String clerkId) {
+        this.clerkId = clerkId;
     }
 
     public List<EntrustFormItem> getItems() {
@@ -131,5 +138,13 @@ public class EntrustForm extends BaseEntity {
 
     public void setPartses(List<EntrustFormParts> partses) {
         this.partses = partses;
+    }
+
+    public String getContactTel() {
+        return contactTel;
+    }
+
+    public void setContactTel(String contactTel) {
+        this.contactTel = contactTel;
     }
 }

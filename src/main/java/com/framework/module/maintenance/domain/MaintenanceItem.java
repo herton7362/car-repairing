@@ -27,10 +27,9 @@ public class MaintenanceItem extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private WorkingTeam workingTeam;
     @ApiModelProperty(value = "所需零件")
-    @ManyToMany
+    @OneToMany(mappedBy = "maintenanceItem")
     @Where(clause="logically_deleted=0")
-    @JoinTable(name="maintenance_item_parts",joinColumns={@JoinColumn(name="maintenance_item_id")},inverseJoinColumns={@JoinColumn(name="part_id")})
-    private List<Parts> parts;
+    private List<MaintenanceItemParts> partses;
 
     public String getName() {
         return name;
@@ -64,11 +63,11 @@ public class MaintenanceItem extends BaseEntity {
         this.workingTeam = workingTeam;
     }
 
-    public List<Parts> getParts() {
-        return parts;
+    public List<MaintenanceItemParts> getPartses() {
+        return partses;
     }
 
-    public void setParts(List<Parts> parts) {
-        this.parts = parts;
+    public void setPartses(List<MaintenanceItemParts> partses) {
+        this.partses = partses;
     }
 }
