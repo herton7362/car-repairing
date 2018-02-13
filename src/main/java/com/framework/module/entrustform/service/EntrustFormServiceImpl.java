@@ -1,9 +1,13 @@
 package com.framework.module.entrustform.service;
 
+import com.framework.module.dispatchform.domain.DispatchForm;
+import com.framework.module.dispatchform.service.DispatchFormService;
 import com.framework.module.entrustform.domain.EntrustForm;
 import com.framework.module.entrustform.domain.EntrustFormItemRepository;
 import com.framework.module.entrustform.domain.EntrustFormPartsRepository;
 import com.framework.module.entrustform.domain.EntrustFormRepository;
+import com.framework.module.entrustform.web.DispatchParam;
+import com.framework.module.maintenance.domain.MaintenanceItem;
 import com.framework.module.member.domain.Member;
 import com.framework.module.member.service.MemberService;
 import com.framework.module.orderform.service.OrderFormService;
@@ -12,6 +16,8 @@ import com.framework.module.vehicle.service.VehicleService;
 import com.kratos.common.AbstractCrudService;
 import com.kratos.common.PageRepository;
 import com.kratos.exceptions.BusinessException;
+import com.kratos.module.auth.AdminThread;
+import com.kratos.module.auth.UserThread;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,6 +34,7 @@ public class EntrustFormServiceImpl extends AbstractCrudService<EntrustForm> imp
     private final MemberService memberService;
     private final EntrustFormItemRepository entrustFormItemRepository;
     private final EntrustFormPartsRepository entrustFormPartsRepository;
+    private final DispatchFormService dispatchFormService;
     @Override
     protected PageRepository<EntrustForm> getRepository() {
         return entrustFormRepository;
@@ -47,6 +54,17 @@ public class EntrustFormServiceImpl extends AbstractCrudService<EntrustForm> imp
         }
         if(entrustForm.getPartses() == null || entrustForm.getPartses().isEmpty()) {
             throw new BusinessException("配件项目不能为空");
+        }
+        if(StringUtils.isNotBlank(entrustForm.getId())) {
+            EntrustForm old = findOne(entrustForm.getId());
+            old.getItems().forEach((item -> {
+                entrustFormItemRepository.delete(item);
+            }));
+            old.getPartses().forEach(parts -> {
+                entrustFormPartsRepository.delete(parts);
+            });
+        } else {
+            entrustForm.setCreator(AdminThread.getInstance().get());
         }
         Member member = memberService.findOneByLoginName(entrustForm.getContactTel());
         if(member == null) {
@@ -89,6 +107,30 @@ public class EntrustFormServiceImpl extends AbstractCrudService<EntrustForm> imp
         }
     }
 
+    @Override
+    public void dispatch(String formId, DispatchParam dispatchParam) throws Exception {
+        if(StringUtils.isBlank(formId)) {
+            throw new BusinessException("委托单id不能为空");
+        }
+        if(StringUtils.isBlank(dispatchParam.getWorkerId()) && StringUtils.isBlank(dispatchParam.getWorkingTeamId())) {
+            throw new BusinessException("请至少选择维修工人、班组的其中一项");
+        }
+        EntrustForm entrustForm = entrustFormRepository.findOne(formId);
+        if(entrustForm == null) {
+            throw new BusinessException("委托单未找到");
+        }
+        entrustForm.setStatus(EntrustForm.Status.DISPATCHING);
+        entrustFormRepository.save(entrustForm);
+        DispatchForm dispatchForm = new DispatchForm();
+        dispatchForm.setEntrustFormId(formId);
+        dispatchForm.setEntrustFormOrderNumber(entrustForm.getOrderNumber());
+        dispatchForm.setOrderNumber(orderFormService.getOutTradeNo());
+        dispatchForm.setWorkerId(dispatchParam.getWorkerId());
+        dispatchForm.setWorkingTeamId(dispatchParam.getWorkingTeamId());
+        dispatchForm.setStatus(DispatchForm.Status.NEW);
+        dispatchFormService.save(dispatchForm);
+    }
+
     @Autowired
     public EntrustFormServiceImpl(
             EntrustFormRepository entrustFormRepository,
@@ -96,7 +138,8 @@ public class EntrustFormServiceImpl extends AbstractCrudService<EntrustForm> imp
             OrderFormService orderFormService,
             MemberService memberService,
             EntrustFormItemRepository entrustFormItemRepository,
-            EntrustFormPartsRepository entrustFormPartsRepository
+            EntrustFormPartsRepository entrustFormPartsRepository,
+            DispatchFormService dispatchFormService
     ) {
         this.entrustFormRepository = entrustFormRepository;
         this.vehicleService = vehicleService;
@@ -104,5 +147,6 @@ public class EntrustFormServiceImpl extends AbstractCrudService<EntrustForm> imp
         this.memberService = memberService;
         this.entrustFormItemRepository = entrustFormItemRepository;
         this.entrustFormPartsRepository = entrustFormPartsRepository;
+        this.dispatchFormService = dispatchFormService;
     }
 }

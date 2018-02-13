@@ -51,6 +51,10 @@ public class EntrustForm extends BaseEntity {
     @ApiModelProperty(value = "联系电话")
     @Column(length = 20)
     private String contactTel;
+    @ApiModelProperty(value = "订单状态")
+    @Column(length = 20)
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     public String getOrderNumber() {
         return orderNumber;
@@ -146,5 +150,26 @@ public class EntrustForm extends BaseEntity {
 
     public void setContactTel(String contactTel) {
         this.contactTel = contactTel;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public static enum Status {
+        NEW("新建"),
+        DISPATCHING("派工"),
+        FINISHED("竣工");
+        private String displayName;
+        Status(String displayName) {
+            this.displayName = displayName;
+        }
+        public String getDisplayName() {
+            return displayName;
+        }
     }
 }
