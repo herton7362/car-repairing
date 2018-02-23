@@ -29,5 +29,13 @@ public interface StoreService extends CrudService<Store> {
      * @param relationId 商品id
      * @param count 数量
      */
-    void inStore(String storeId, String relationId, Double count);
+    void inStore(String storeId, String relationId, Double count) throws Exception;
+
+    /**
+     * 减少库存
+     * @param storeId 仓库id
+     * @param relationId 商品id
+     * @param count 数量
+     */
+    void outStore(String storeId, String relationId, Double count) throws Exception;
 }

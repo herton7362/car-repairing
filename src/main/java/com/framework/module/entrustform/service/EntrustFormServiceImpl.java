@@ -20,6 +20,7 @@ import com.kratos.module.auth.AdminThread;
 import com.kratos.module.auth.UserThread;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +65,7 @@ public class EntrustFormServiceImpl extends AbstractCrudService<EntrustForm> imp
                 entrustFormPartsRepository.delete(parts);
             });
         } else {
+            entrustForm.setOrderNumber(orderFormService.getOutTradeNo());
             entrustForm.setCreator(AdminThread.getInstance().get());
         }
         Member member = memberService.findOneByLoginName(entrustForm.getContactTel());
@@ -79,9 +81,6 @@ public class EntrustFormServiceImpl extends AbstractCrudService<EntrustForm> imp
         }
         validate(vehicle);
 
-        if(StringUtils.isBlank(entrustForm.getId())) {
-            entrustForm.setOrderNumber(orderFormService.getOutTradeNo());
-        }
         entrustForm.setVehicle(vehicleService.save(vehicle));
         EntrustForm result = super.save(entrustForm);
         entrustForm.getItems().forEach((item -> {
@@ -132,6 +131,7 @@ public class EntrustFormServiceImpl extends AbstractCrudService<EntrustForm> imp
     }
 
     @Autowired
+    @Lazy
     public EntrustFormServiceImpl(
             EntrustFormRepository entrustFormRepository,
             VehicleService vehicleService,

@@ -16,21 +16,15 @@ public class OutStoreForm extends BaseEntity {
     @ApiModelProperty(value = "仓库id")
     @Column(length = 36)
     private String storeId;
-    @ApiModelProperty(value = "关联商品id")
-    @Column(length = 36)
-    private String relationId;
-    @ApiModelProperty(value = "数量")
-    @Column(length = 11, precision = 2)
-    private Double count;
-    @ApiModelProperty(value = "入库时间")
-    private Date inStoreDate;
+    @ApiModelProperty(value = "出库时间")
+    private Date outStoreDate;
     @ApiModelProperty(value = "操作员（admin表）")
     @Column(length = 36)
     private String operatorId;
     @ApiModelProperty(value = "业务类型")
     @Column(length = 20)
     @Enumerated(EnumType.STRING)
-    private InStoreForm.BusinessType businessType;
+    private BusinessType businessType;
 
     public String getStoreId() {
         return storeId;
@@ -40,28 +34,12 @@ public class OutStoreForm extends BaseEntity {
         this.storeId = storeId;
     }
 
-    public String getRelationId() {
-        return relationId;
+    public Date getOutStoreDate() {
+        return outStoreDate;
     }
 
-    public void setRelationId(String relationId) {
-        this.relationId = relationId;
-    }
-
-    public Double getCount() {
-        return count;
-    }
-
-    public void setCount(Double count) {
-        this.count = count;
-    }
-
-    public Date getInStoreDate() {
-        return inStoreDate;
-    }
-
-    public void setInStoreDate(Date inStoreDate) {
-        this.inStoreDate = inStoreDate;
+    public void setOutStoreDate(Date outStoreDate) {
+        this.outStoreDate = outStoreDate;
     }
 
     public String getOperatorId() {
@@ -70,6 +48,14 @@ public class OutStoreForm extends BaseEntity {
 
     public void setOperatorId(String operatorId) {
         this.operatorId = operatorId;
+    }
+
+    public BusinessType getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(BusinessType businessType) {
+        this.businessType = businessType;
     }
 
     public static enum BusinessType {

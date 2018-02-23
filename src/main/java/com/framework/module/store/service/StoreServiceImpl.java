@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,46 @@ public class StoreServiceImpl extends AbstractCrudService<Store> implements Stor
         Map<String, String[]> params = new HashMap<>();
         params.put("storeId", new String[]{storeId});
         return goodsService.findAll(pageRequest, params);
+    }
+
+    @Override
+    public synchronized void inStore(String storeId, String relationId, Double count) throws Exception {
+        Map<String, String[]> params = new HashMap<>();
+        params.put("storeId", new String[]{storeId});
+        params.put("relationId", new String[]{relationId});
+        List<Goods> goodsList = goodsService.findAll(params);
+        Goods goods = null;
+        if(goodsList != null && !goodsList.isEmpty()) {
+            goods = goodsList.get(0);
+            goods.setCount(new BigDecimal(goods.getCount()).add(new BigDecimal(count)).doubleValue());
+            goodsService.save(goods);
+        } else {
+            goods = new Goods();
+            goods.setCount(count);
+            goods.setRelationId(relationId);
+            goods.setStoreId(storeId);
+            goodsService.save(goods);
+        }
+    }
+
+    @Override
+    public synchronized void outStore(String storeId, String relationId, Double count) throws Exception {
+        Map<String, String[]> params = new HashMap<>();
+        params.put("storeId", new String[]{storeId});
+        params.put("relationId", new String[]{relationId});
+        List<Goods> goodsList = goodsService.findAll(params);
+        Goods goods = null;
+        if(goodsList != null && !goodsList.isEmpty()) {
+            goods = goodsList.get(0);
+            goods.setCount(new BigDecimal(goods.getCount()).subtract(new BigDecimal(count)).doubleValue());
+            goodsService.save(goods);
+        } else {
+            goods = new Goods();
+            goods.setCount(-count);
+            goods.setRelationId(relationId);
+            goods.setStoreId(storeId);
+            goodsService.save(goods);
+        }
     }
 
     @Autowired

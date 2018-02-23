@@ -10,6 +10,7 @@ import com.kratos.common.PageRepository;
 import com.kratos.exceptions.BusinessException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +47,7 @@ public class DispatchFormServiceImpl extends AbstractCrudService<DispatchForm> i
     }
 
     @Autowired
+    @Lazy
     public DispatchFormServiceImpl(
             DispatchFormRepository dispatchFormRepository,
             OrderFormService orderFormService,

@@ -16,12 +16,6 @@ public class InStoreForm extends BaseEntity {
     @ApiModelProperty(value = "仓库id")
     @Column(length = 36)
     private String storeId;
-    @ApiModelProperty(value = "关联商品id")
-    @Column(length = 36)
-    private String relationId;
-    @ApiModelProperty(value = "数量")
-    @Column(length = 11, precision = 2)
-    private Double count;
     @ApiModelProperty(value = "入库时间")
     private Date inStoreDate;
     @ApiModelProperty(value = "操作员（admin表）")
@@ -40,22 +34,6 @@ public class InStoreForm extends BaseEntity {
         this.storeId = storeId;
     }
 
-    public String getRelationId() {
-        return relationId;
-    }
-
-    public void setRelationId(String relationId) {
-        this.relationId = relationId;
-    }
-
-    public Double getCount() {
-        return count;
-    }
-
-    public void setCount(Double count) {
-        this.count = count;
-    }
-
     public Date getInStoreDate() {
         return inStoreDate;
     }
@@ -70,6 +48,14 @@ public class InStoreForm extends BaseEntity {
 
     public void setOperatorId(String operatorId) {
         this.operatorId = operatorId;
+    }
+
+    public BusinessType getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(BusinessType businessType) {
+        this.businessType = businessType;
     }
 
     public static enum BusinessType {
