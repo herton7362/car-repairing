@@ -9,10 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(value = "领料单管理")
 @RestController
@@ -29,8 +26,8 @@ public class DrawingFormController extends AbstractCrudController<DrawingForm> {
      */
     @ApiOperation(value="领料出库")
     @RequestMapping(value = "/outStore/{formId}", method = RequestMethod.POST)
-    public ResponseEntity<?> outStore(@PathVariable String formId) throws Exception {
-        drawingFormService.outStore(formId);
+    public ResponseEntity<?> outStore(@PathVariable String formId, @RequestBody OutStoreParam outStoreParam) throws Exception {
+        drawingFormService.outStore(formId, outStoreParam);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

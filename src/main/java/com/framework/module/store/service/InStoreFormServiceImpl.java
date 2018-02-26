@@ -17,36 +17,13 @@ import java.util.Map;
 @Transactional
 public class InStoreFormServiceImpl extends AbstractCrudService<InStoreForm> implements InStoreFormService {
     private final InStoreFormRepository inStoreFormRepository;
-    private final StoreService storeService;
-    private final InStoreFormItemService inStoreFormItemService;
     @Override
     protected PageRepository<InStoreForm> getRepository() {
         return inStoreFormRepository;
     }
 
-    @Override
-    public InStoreForm save(InStoreForm inStoreForm) throws Exception {
-        InStoreForm result = super.save(inStoreForm);
-        if(StringUtils.isBlank(inStoreForm.getId())) {
-            inStoreForm.setInStoreDate(new Date());
-            Map<String, String[]> param = new HashMap<>();
-            param.put("inStoreFormId", new String[]{result.getId()});
-            List<InStoreFormItem> inStoreFormItems = inStoreFormItemService.findAll(param);
-            for (InStoreFormItem inStoreFormItem : inStoreFormItems) {
-                storeService.inStore(inStoreForm.getStoreId(), inStoreFormItem.getRelationId(), inStoreFormItem.getCount());
-            }
-        }
-        return result;
-    }
-
     @Autowired
-    public InStoreFormServiceImpl(
-            InStoreFormRepository inStoreFormRepository,
-            StoreService storeService,
-            InStoreFormItemService inStoreFormItemService
-    ) {
+    public InStoreFormServiceImpl(InStoreFormRepository inStoreFormRepository) {
         this.inStoreFormRepository = inStoreFormRepository;
-        this.storeService = storeService;
-        this.inStoreFormItemService = inStoreFormItemService;
     }
 }

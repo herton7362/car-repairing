@@ -55,6 +55,9 @@ public class EntrustForm extends BaseEntity {
     @Column(length = 20)
     @Enumerated(EnumType.STRING)
     private Status status;
+    @ApiModelProperty("实付")
+    @Column(length = 11, precision = 2)
+    private Double finalPay;
 
     public String getOrderNumber() {
         return orderNumber;
@@ -158,6 +161,14 @@ public class EntrustForm extends BaseEntity {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Double getFinalPay() {
+        return finalPay;
+    }
+
+    public void setFinalPay(Double finalPay) {
+        this.finalPay = finalPay;
     }
 
     public static enum Status {

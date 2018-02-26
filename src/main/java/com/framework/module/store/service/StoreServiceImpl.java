@@ -6,6 +6,8 @@ import com.framework.module.store.domain.StoreRepository;
 import com.kratos.common.AbstractCrudService;
 import com.kratos.common.PageRepository;
 import com.kratos.common.PageResult;
+import com.kratos.exceptions.BusinessException;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
@@ -42,6 +44,9 @@ public class StoreServiceImpl extends AbstractCrudService<Store> implements Stor
 
     @Override
     public synchronized void inStore(String storeId, String relationId, Double count) throws Exception {
+        if(StringUtils.isBlank(storeId)) {
+            throw new BusinessException("请指定仓库");
+        }
         Map<String, String[]> params = new HashMap<>();
         params.put("storeId", new String[]{storeId});
         params.put("relationId", new String[]{relationId});
@@ -62,6 +67,9 @@ public class StoreServiceImpl extends AbstractCrudService<Store> implements Stor
 
     @Override
     public synchronized void outStore(String storeId, String relationId, Double count) throws Exception {
+        if(StringUtils.isBlank(storeId)) {
+            throw new BusinessException("请指定仓库");
+        }
         Map<String, String[]> params = new HashMap<>();
         params.put("storeId", new String[]{storeId});
         params.put("relationId", new String[]{relationId});
