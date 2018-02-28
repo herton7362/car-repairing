@@ -31,6 +31,25 @@ public class EntrustFormController extends AbstractCrudController<EntrustForm> {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * 收款
+     */
+    @ApiOperation(value="收款")
+    @RequestMapping(value = "/pay/{formId}", method = RequestMethod.POST)
+    public ResponseEntity<?> pay(@PathVariable String formId, @RequestBody PayParam payParam) throws Exception {
+        entrustFormService.pay(formId, payParam);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * 竣工
+     */
+    @ApiOperation(value="竣工")
+    @RequestMapping(value = "/finish/{formId}", method = RequestMethod.POST)
+    public ResponseEntity<?> finish(@PathVariable String formId) throws Exception {
+        entrustFormService.finish(formId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @Autowired
     public EntrustFormController(EntrustFormService entrustFormService) {

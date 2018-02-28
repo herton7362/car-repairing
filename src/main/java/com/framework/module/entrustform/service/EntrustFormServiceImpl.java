@@ -7,6 +7,7 @@ import com.framework.module.entrustform.domain.EntrustFormItemRepository;
 import com.framework.module.entrustform.domain.EntrustFormPartsRepository;
 import com.framework.module.entrustform.domain.EntrustFormRepository;
 import com.framework.module.entrustform.web.DispatchParam;
+import com.framework.module.entrustform.web.PayParam;
 import com.framework.module.maintenance.domain.MaintenanceItem;
 import com.framework.module.member.domain.Member;
 import com.framework.module.member.service.MemberService;
@@ -128,6 +129,45 @@ public class EntrustFormServiceImpl extends AbstractCrudService<EntrustForm> imp
         dispatchForm.setWorkingTeamId(dispatchParam.getWorkingTeamId());
         dispatchForm.setStatus(DispatchForm.Status.NEW);
         dispatchFormService.save(dispatchForm);
+    }
+
+    @Override
+    public void pay(String formId, PayParam payParam) throws Exception {
+        if(StringUtils.isBlank(formId)) {
+            throw new BusinessException("委托单id不能为空");
+        }
+        EntrustForm.PayType[] payType = EntrustForm.PayType.values();
+        Boolean hasPayType = false;
+        for (EntrustForm.PayType type : payType) {
+            if(type == payParam.getPayType()) {
+                hasPayType = true;
+            }
+        }
+        if(!hasPayType) {
+            throw new BusinessException("payType 不正确或不能为空");
+        }
+        EntrustForm entrustForm = entrustFormRepository.findOne(formId);
+        Member member = memberService.findOne(entrustForm.getVehicle().getMemberId());
+        if(member.getBalance() < payParam.getBalancePay()) {
+            throw new BusinessException("会员余额不足");
+        }
+        memberService.deductBalance(member.getId(), payParam.getBalancePay());
+        entrustForm.setPayType(payParam.getPayType());
+        entrustForm.setCashPay(payParam.getCashPay());
+        entrustForm.setBalancePay(payParam.getBalancePay());
+        entrustForm.setFinalPay(payParam.getFinalPay());
+        entrustForm.setPayStatus(EntrustForm.PayStatus.PAYED);
+        entrustFormRepository.save(entrustForm);
+    }
+
+    @Override
+    public void finish(String formId) throws Exception {
+        if(StringUtils.isBlank(formId)) {
+            throw new BusinessException("委托单id不能为空");
+        }
+        EntrustForm entrustForm = entrustFormRepository.findOne(formId);
+        entrustForm.setStatus(EntrustForm.Status.FINISHED);
+        entrustFormRepository.save(entrustForm);
     }
 
     @Autowired

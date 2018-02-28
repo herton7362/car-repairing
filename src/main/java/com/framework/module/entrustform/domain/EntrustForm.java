@@ -58,6 +58,20 @@ public class EntrustForm extends BaseEntity {
     @ApiModelProperty("实付")
     @Column(length = 11, precision = 2)
     private Double finalPay;
+    @ApiModelProperty("现金支付")
+    @Column(length = 11, precision = 2)
+    private Double cashPay;
+    @ApiModelProperty("余额支付金额")
+    @Column(length = 11, precision = 2)
+    private Double balancePay;
+    @ApiModelProperty(value = "支付方式")
+    @Column(length = 20)
+    @Enumerated(EnumType.STRING)
+    private PayType payType;
+    @ApiModelProperty(value = "支付状态")
+    @Column(length = 20)
+    @Enumerated(EnumType.STRING)
+    private PayStatus payStatus;
 
     public String getOrderNumber() {
         return orderNumber;
@@ -171,12 +185,68 @@ public class EntrustForm extends BaseEntity {
         this.finalPay = finalPay;
     }
 
+    public Double getCashPay() {
+        return cashPay;
+    }
+
+    public void setCashPay(Double cashPay) {
+        this.cashPay = cashPay;
+    }
+
+    public Double getBalancePay() {
+        return balancePay;
+    }
+
+    public void setBalancePay(Double balancePay) {
+        this.balancePay = balancePay;
+    }
+
+    public PayType getPayType() {
+        return payType;
+    }
+
+    public void setPayType(PayType payType) {
+        this.payType = payType;
+    }
+
+    public PayStatus getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(PayStatus payStatus) {
+        this.payStatus = payStatus;
+    }
+
     public static enum Status {
         NEW("新建"),
         DISPATCHING("派工"),
         FINISHED("竣工");
         private String displayName;
         Status(String displayName) {
+            this.displayName = displayName;
+        }
+        public String getDisplayName() {
+            return displayName;
+        }
+    }
+
+    public static enum PayType {
+        ONLINE("线上"),
+        OFFLINE("线下");
+        private String displayName;
+        PayType(String displayName) {
+            this.displayName = displayName;
+        }
+        public String getDisplayName() {
+            return displayName;
+        }
+    }
+
+    public static enum PayStatus {
+        UNPAY("未支付"),
+        PAYED("已支付");
+        private String displayName;
+        PayStatus(String displayName) {
             this.displayName = displayName;
         }
         public String getDisplayName() {
