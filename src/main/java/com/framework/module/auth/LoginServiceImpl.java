@@ -9,6 +9,8 @@ import com.kratos.exceptions.BusinessException;
 import com.kratos.kits.Kits;
 import com.kratos.kits.notification.Notification;
 import com.kratos.module.auth.UserThread;
+import com.kratos.module.auth.domain.OauthClientDetails;
+import com.kratos.module.auth.service.OauthClientDetailsService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,6 +27,7 @@ public class LoginServiceImpl extends AbstractLoginService {
     private final Kits kits;
     private final TokenEndpoint tokenEndpoint;
     private final MemberService memberService;
+    private final OauthClientDetailsService oauthClientDetailsService;
 
     @Override
     protected Notification getNotification() {
@@ -34,6 +37,27 @@ public class LoginServiceImpl extends AbstractLoginService {
     @Override
     protected TokenEndpoint getTokenEndpoint() {
         return tokenEndpoint;
+    }
+
+    @Override
+    public ResponseEntity<OAuth2AccessToken> login(String appId, String appSecret, String username, String password) throws Exception {
+        if(StringUtils.isBlank(username)) {
+            throw new BusinessException("请输入用户名");
+        }
+        if(StringUtils.isBlank(password)) {
+            throw new BusinessException("请输入密码");
+        }
+        String[] usernameAndClientId = username.split("@");
+        if(usernameAndClientId.length == 1) {
+            throw new BusinessException("请使用 xxx@xxx 的方式作为用户名登录");
+        }
+        username = usernameAndClientId[0];
+        appId = usernameAndClientId[1];
+        OauthClientDetails oauthClientDetails = oauthClientDetailsService.findOneByClientId(appId);
+        if(oauthClientDetails == null) {
+            throw new BusinessException("商户【" + appId + "】不存在");
+        }
+        return super.login(appId, oauthClientDetails.getClientSecret(), username, password);
     }
 
     @Override
@@ -83,10 +107,12 @@ public class LoginServiceImpl extends AbstractLoginService {
     public LoginServiceImpl(
             Kits kits,
             TokenEndpoint tokenEndpoint,
-            MemberService memberService
+            MemberService memberService,
+            OauthClientDetailsService oauthClientDetailsService
     ) {
         this.kits = kits;
         this.tokenEndpoint = tokenEndpoint;
         this.memberService = memberService;
+        this.oauthClientDetailsService = oauthClientDetailsService;
     }
 }

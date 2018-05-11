@@ -18,6 +18,9 @@ public class VehicleCategory extends BaseEntity {
     @ApiModelProperty(value = "名称")
     @Column(length = 50)
     private String name;
+    @ApiModelProperty(value = "拼音码")
+    @Column(length = 50)
+    private String pinyin;
     @ApiModelProperty(value = "车辆喷漆")
     @ManyToMany
     @JoinTable(name="vehicle_category_paints",joinColumns={@JoinColumn(name="vehicle_category_id")},inverseJoinColumns={@JoinColumn(name="product_standard_item_id")})
@@ -42,6 +45,14 @@ public class VehicleCategory extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPinyin() {
+        return pinyin;
+    }
+
+    public void setPinyin(String pinyin) {
+        this.pinyin = pinyin;
     }
 
     public List<ProductStandardItem> getPaints() {

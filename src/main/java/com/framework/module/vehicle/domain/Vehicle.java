@@ -1,5 +1,10 @@
 package com.framework.module.vehicle.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.framework.module.maintenance.domain.VehicleCategoryIdDeserializer;
+import com.framework.module.maintenance.domain.VehicleCategoryIdSerializer;
 import com.framework.module.member.domain.Member;
 import com.kratos.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
@@ -9,12 +14,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import java.util.Date;
 
 @Entity
 @ApiModel("车")
 public class Vehicle extends BaseEntity {
     @ApiModelProperty(value = "车型id")
-    @Column(length = 36)
+    @Column(length = 300)
+    @JsonSerialize(using = VehicleCategoryIdSerializer.class)
+    @JsonDeserialize(using = VehicleCategoryIdDeserializer.class)
     private String vehicleCategoryId;
     @ApiModelProperty(value = "发动机排量")
     @Column(length = 50)
@@ -35,6 +43,12 @@ public class Vehicle extends BaseEntity {
     @ApiModelProperty(value = "车架号")
     @Column(length = 50)
     private String frameNumber;
+    @ApiModelProperty(value = "上路时间")
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM")
+    private Date driveDate;
+    @ApiModelProperty(value = "行驶里程")
+    @Column(length = 11, precision = 13, scale = 2)
+    private Double mileage;
 
     public String getVehicleCategoryId() {
         return vehicleCategoryId;
@@ -106,5 +120,21 @@ public class Vehicle extends BaseEntity {
 
     public void setFrameNumber(String frameNumber) {
         this.frameNumber = frameNumber;
+    }
+
+    public Date getDriveDate() {
+        return driveDate;
+    }
+
+    public void setDriveDate(Date driveDate) {
+        this.driveDate = driveDate;
+    }
+
+    public Double getMileage() {
+        return mileage;
+    }
+
+    public void setMileage(Double mileage) {
+        this.mileage = mileage;
     }
 }

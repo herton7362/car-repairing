@@ -22,8 +22,8 @@ public class EntrustForm extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private Vehicle vehicle;
     @ApiModelProperty(value = "创建人")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Admin creator;
+    @Column(length = 36)
+    private String creatorId;
     @ApiModelProperty(value = "进场时间")
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")
     private Date approachDate;
@@ -72,6 +72,10 @@ public class EntrustForm extends BaseEntity {
     @Column(length = 20)
     @Enumerated(EnumType.STRING)
     private PayStatus payStatus;
+    @ApiModelProperty(value = "来源")
+    @Column(length = 20)
+    @Enumerated(EnumType.STRING)
+    private Origin origin;
 
     public String getOrderNumber() {
         return orderNumber;
@@ -89,12 +93,12 @@ public class EntrustForm extends BaseEntity {
         this.vehicle = vehicle;
     }
 
-    public Admin getCreator() {
-        return creator;
+    public String getCreatorId() {
+        return creatorId;
     }
 
-    public void setCreator(Admin creator) {
-        this.creator = creator;
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
     }
 
     public Date getApproachDate() {
@@ -217,8 +221,17 @@ public class EntrustForm extends BaseEntity {
         this.payStatus = payStatus;
     }
 
+    public Origin getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(Origin origin) {
+        this.origin = origin;
+    }
+
     public static enum Status {
         NEW("新建"),
+        CONFIRM("确认"),
         DISPATCHING("派工"),
         FINISHED("竣工");
         private String displayName;
@@ -235,6 +248,18 @@ public class EntrustForm extends BaseEntity {
         OFFLINE("线下");
         private String displayName;
         PayType(String displayName) {
+            this.displayName = displayName;
+        }
+        public String getDisplayName() {
+            return displayName;
+        }
+    }
+
+    public static enum Origin {
+        LOCAL("本地创建"),
+        ONLINE_SHOP("线上商城");
+        private String displayName;
+        Origin(String displayName) {
             this.displayName = displayName;
         }
         public String getDisplayName() {

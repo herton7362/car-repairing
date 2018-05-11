@@ -22,9 +22,6 @@ public class Shop extends BaseEntity {
     @ApiModelProperty(value = "地址")
     @Column(length = 500)
     private String address;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "clientId", referencedColumnName = "clientId")
-    private OauthClientDetails oauthClientDetails;
 
     public String getName() {
         return name;
@@ -50,11 +47,4 @@ public class Shop extends BaseEntity {
         this.address = address;
     }
 
-    public OauthClientDetails getOauthClientDetails() {
-        return oauthClientDetails;
-    }
-
-    public void setOauthClientDetails(OauthClientDetails oauthClientDetails) {
-        this.oauthClientDetails = oauthClientDetails;
-    }
 }

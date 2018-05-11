@@ -1,17 +1,12 @@
-package com.framework.module.shop.web;
+package com.framework.module.parts.web;
 
-import com.framework.module.shop.domain.Shop;
-import com.framework.module.shop.service.ShopService;
-import com.kratos.common.AbstractCrudController;
-import com.kratos.common.CrudService;
+import com.framework.module.parts.service.PartsService;
 import com.kratos.common.PageParam;
 import com.kratos.common.PageResult;
-import com.kratos.module.auth.service.OauthClientDetailsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,16 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-@Api(value = "店铺管理")
+@Api(value = "配件查询")
 @RestController
-@RequestMapping("/api/shop")
-public class ShopController extends AbstractCrudController<Shop> {
-    private final ShopService shopService;
-    @Override
-    protected CrudService<Shop> getService() {
-        return shopService;
-    }
-
+@RequestMapping("/parts")
+public class GuestPartsController {
+    private final PartsService partsService;
     /**
      * 查询
      */
@@ -41,19 +31,28 @@ public class ShopController extends AbstractCrudController<Shop> {
             @ApiImplicitParam(name = "sort", value = "排序属性，多个用逗号隔开", dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "order", value = "排序方向，多个用逗号隔开", dataType = "String", paramType = "query")
     })
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity<?> searchPagedListAll(@ModelAttribute PageParam pageParam, HttpServletRequest request) throws Exception {
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<?> searchPagedList(@ModelAttribute PageParam pageParam, HttpServletRequest request) throws Exception {
         Map<String, String[]> param = request.getParameterMap();
         if(pageParam.isPageAble()) {
-            PageResult<Shop> page = shopService.findAllEveryEntities(pageParam.getPageRequest(), param);
+            PageResult<PartsResult> page = partsService.findAllTranslated(pageParam.getPageRequest(), param);
             return new ResponseEntity<>(page, HttpStatus.OK);
         }
-        List<Shop> list = shopService.findAllEveryEntities(param);
+        List<PartsResult> list = partsService.findAllTranslated(param);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    /**
+     * 查询一个
+     */
+    @ApiOperation(value="查询一个")
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<PartsResult> getOne(@PathVariable String id) throws Exception {
+        return new ResponseEntity<>(partsService.findOneTranslated(id), HttpStatus.OK);
+    }
+
     @Autowired
-    public ShopController(ShopService shopService) {
-        this.shopService  = shopService;
+    public GuestPartsController(PartsService partsService) {
+        this.partsService = partsService;
     }
 }

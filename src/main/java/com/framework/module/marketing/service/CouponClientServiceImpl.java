@@ -43,7 +43,7 @@ public class CouponClientServiceImpl extends AbstractCrudClientService<Coupon> i
     public void validCouponUseAble(String couponId, Double amount) throws Exception {
         Coupon coupon = findOne(couponId);
         String clientId = UserThread.getInstance().getClientId();
-        if(!clientId.equals(coupon.getClient().getClientId())) {
+        if(!clientId.equals(coupon.getClientId())) {
             throw new BusinessException("优惠券不属于当前系统");
         }
         // 如果优惠券策略是满减

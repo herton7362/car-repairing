@@ -45,13 +45,9 @@ require(['jquery', 'vue', 'utils'], function($, Vue, utils) {
                     }}
                 ]
             },
-            client: {
-                data: []
-            },
             formData: {
                 id: null,
                 name: null,
-                client: {clientId: null},
                 amount: null,
                 minAmount: null,
                 startDate: null,
@@ -64,17 +60,6 @@ require(['jquery', 'vue', 'utils'], function($, Vue, utils) {
         },
         mounted: function() {
             this.crudgrid.$instance.load();
-            var self = this;
-            $.ajax({
-                url: utils.patchUrl('/api/oauthClient'),
-                data: {
-                    sort: 'sortNumber',
-                    order: 'asc'
-                },
-                success: function(data) {
-                    self.client.data = data.content;
-                }
-            })
         }
     });
 });

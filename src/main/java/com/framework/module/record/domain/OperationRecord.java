@@ -19,15 +19,11 @@ public class OperationRecord extends BaseEntity {
     @Column(length = 2000)
     private String content;
     @ApiModelProperty(value = "操作会员")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Member member;
+    @Column(length = 36)
+    private String memberId;
     @ApiModelProperty(value = "操作管理员")
     @ManyToOne(fetch = FetchType.EAGER)
     private Admin admin;
-    @ApiModelProperty(value = "oauth2 客户端id")
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "clientId", referencedColumnName = "clientId")
-    private OauthClientDetails client;
     @ApiModelProperty(value = "操作ip地址")
     @Column(length = 30)
     private String ipAddress;
@@ -48,12 +44,12 @@ public class OperationRecord extends BaseEntity {
         this.content = content;
     }
 
-    public Member getMember() {
-        return member;
+    public String getMemberId() {
+        return memberId;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public Admin getAdmin() {
@@ -62,14 +58,6 @@ public class OperationRecord extends BaseEntity {
 
     public void setAdmin(Admin admin) {
         this.admin = admin;
-    }
-
-    public OauthClientDetails getClient() {
-        return client;
-    }
-
-    public void setClient(OauthClientDetails client) {
-        this.client = client;
     }
 
     public String getIpAddress() {

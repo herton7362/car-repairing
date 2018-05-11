@@ -16,11 +16,7 @@ require(['jquery', 'vue', 'messager', 'utils'], function($, Vue, messager, utils
                 id: null,
                 name: null,
                 address: null,
-                styleImages: [],
-                oauthClientDetails: {}
-            },
-            client: {
-                data: {}
+                styleImages: []
             }
         },
         methods: {
@@ -29,16 +25,6 @@ require(['jquery', 'vue', 'messager', 'utils'], function($, Vue, messager, utils
         mounted: function() {
             var self = this;
             this.crudgrid.$instance.load();
-            $.ajax({
-                url: utils.patchUrl('/api/oauthClient'),
-                data: {
-                    sort: 'sortNumber',
-                    order: 'asc'
-                },
-                success: function(data) {
-                    self.client.data = data.content;
-                }
-            })
         }
     });
 });

@@ -3,6 +3,7 @@ package com.framework.module.member.service;
 import com.framework.module.auth.MemberThread;
 import com.framework.module.member.domain.Member;
 import com.framework.module.member.domain.MemberCoupon;
+import com.framework.module.member.domain.MemberLevel;
 import com.framework.module.member.domain.MemberRepository;
 import com.framework.module.orderform.base.BaseOrderForm;
 import com.framework.module.orderform.base.BaseOrderItem;
@@ -79,9 +80,9 @@ public class MemberServiceImpl extends AbstractCrudService<Member> implements Me
      */
     private void record(Member member, String content, OperationRecord.BusinessType businessType) throws Exception {
         OperationRecord rechargeRecord = new OperationRecord();
-        rechargeRecord.setMember(member);
+        rechargeRecord.setMemberId(member.getId());
         rechargeRecord.setBusinessType(businessType.name());
-        rechargeRecord.setClient(oauthClientDetailsService.findOneByClientId(MemberThread.getInstance().getClientId()));
+        rechargeRecord.setClientId(MemberThread.getInstance().getClientId());
         rechargeRecord.setIpAddress(MemberThread.getInstance().getIpAddress());
         rechargeRecord.setContent(content);
         operationRecordService.save(rechargeRecord);
@@ -178,6 +179,11 @@ public class MemberServiceImpl extends AbstractCrudService<Member> implements Me
             }
         }
         return count;
+    }
+
+    @Override
+    public MemberLevel getMemberLevel(String memberId) throws Exception {
+        return null;
     }
 
     private Integer subtractNumber(Integer sourcePoint, Integer point) {

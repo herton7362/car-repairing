@@ -17,6 +17,6 @@ public class WeChatAPIConfig implements WeChatAPIConfigurer {
         weChatPayConfig.setAppSecret("77ahhdskkqwuiqjhda8989wejasdq2ad");
         weChatPayConfig.setApiKey("77ahhdskkqwuiqjhda8989wejasdq2ad");
         weChatPayConfig.setMchId("1486889962");
-        weChatPayConfig.setNotifyUrl("http://mall.djrentcar.com/wechat/pay/notify");
+        weChatPayConfig.setNotifyUrl("http://repair-api.djrentcar.com/wechat/pay/notify");
     }
 }

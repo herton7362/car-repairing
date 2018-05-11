@@ -1,5 +1,6 @@
 package com.framework.module.member.service;
 
+import com.framework.module.member.domain.MemberLevel;
 import com.framework.module.orderform.base.BaseOrderForm;
 import com.framework.module.orderform.domain.OrderForm;
 import com.kratos.common.CrudService;
@@ -59,4 +60,11 @@ public interface MemberService extends CrudService<Member> {
      * @return 优惠券数量
      */
     Integer getAvailableCouponCount(String memberId) throws Exception;
+
+    /**
+     * 获取会员等级
+     * @param memberId 会员id
+     * @return 会员等级
+     */
+    MemberLevel getMemberLevel(String memberId) throws Exception;
 }

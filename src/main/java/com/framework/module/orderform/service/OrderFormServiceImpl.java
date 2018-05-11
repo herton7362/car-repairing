@@ -307,9 +307,9 @@ public class OrderFormServiceImpl extends AbstractCrudService<OrderForm> impleme
      */
     private void recordConsume(Member member, Double cash, Double balance, Integer point, List<OrderItem> items) throws Exception {
         OperationRecord rechargeRecord = new OperationRecord();
-        rechargeRecord.setMember(member);
+        rechargeRecord.setMemberId(member.getId());
         rechargeRecord.setBusinessType(OperationRecord.BusinessType.CONSUME.name());
-        rechargeRecord.setClient(oauthClientDetailsService.findOneByClientId(MemberThread.getInstance().getClientId()));
+        rechargeRecord.setClientId(MemberThread.getInstance().getClientId());
         rechargeRecord.setIpAddress(MemberThread.getInstance().getIpAddress());
         StringBuilder content = new StringBuilder();
         content.append(String.format("现金消费 %s 元，余额消费 %s 元，积分消费 %s 分", cash, balance, point));
@@ -333,9 +333,9 @@ public class OrderFormServiceImpl extends AbstractCrudService<OrderForm> impleme
      */
     private void recordReject(Member member, Double cash, Double balance, Integer point, OrderForm orderForm) throws Exception {
         OperationRecord rechargeRecord = new OperationRecord();
-        rechargeRecord.setMember(member);
+        rechargeRecord.setMemberId(member.getId());
         rechargeRecord.setBusinessType(OperationRecord.BusinessType.REJECT.name());
-        rechargeRecord.setClient(oauthClientDetailsService.findOneByClientId(MemberThread.getInstance().getClientId()));
+        rechargeRecord.setClientId(MemberThread.getInstance().getClientId());
         rechargeRecord.setIpAddress(MemberThread.getInstance().getIpAddress());
         String content = String.format("现金退款 %s 元，余额退款 %s 元，积分退款 %s 分", cash, balance, point)
                 + String.format("  订单号：%s" , orderForm.getOrderNumber());

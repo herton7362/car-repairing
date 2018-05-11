@@ -54,9 +54,9 @@ public class RechargeServiceImpl implements RechargeService {
      */
     private void record(String memberId, Double amount, Double extAmount) throws Exception {
         OperationRecord rechargeRecord = new OperationRecord();
-        rechargeRecord.setMember(memberService.findOne(memberId));
+        rechargeRecord.setMemberId(memberId);
         rechargeRecord.setBusinessType(OperationRecord.BusinessType.RECHARGE.name());
-        rechargeRecord.setClient(oauthClientDetailsService.findOneByClientId(MemberThread.getInstance().getClientId()));
+        rechargeRecord.setClientId(MemberThread.getInstance().getClientId());
         rechargeRecord.setIpAddress(MemberThread.getInstance().getIpAddress());
         rechargeRecord.setContent(String.format("会员充值金额%s，其中赠送金额为%s", amount, extAmount));
         operationRecordService.save(rechargeRecord);

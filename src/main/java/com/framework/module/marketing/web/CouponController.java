@@ -32,21 +32,6 @@ public class CouponController extends AbstractCrudController<Coupon> {
     }
 
     /**
-     * 保存
-     */
-    @ApiOperation(value="保存")
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Coupon> save(@RequestBody Coupon coupon) throws Exception {
-        if(coupon.getClient() != null && StringUtils.isNotBlank(coupon.getClient().getClientId())) {
-            coupon.setClient(oauthClientDetailsService.findOneByClientId(coupon.getClient().getClientId()));
-        } else {
-            coupon.setClient(null);
-        }
-        coupon = couponService.save(coupon);
-        return new ResponseEntity<>(coupon, HttpStatus.OK);
-    }
-
-    /**
      * 获取未获取的优惠券
      */
     @ApiOperation(value="获取未获取的优惠券")

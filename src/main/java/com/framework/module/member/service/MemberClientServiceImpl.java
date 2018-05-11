@@ -2,6 +2,7 @@ package com.framework.module.member.service;
 
 import com.framework.config.OAuth2Properties;
 import com.framework.module.member.domain.Member;
+import com.framework.module.member.domain.MemberLevel;
 import com.framework.module.member.web.DeductBalanceParam;
 import com.framework.module.member.web.FastIncreasePointParam;
 import com.framework.module.orderform.base.BaseOrderForm;
@@ -91,6 +92,13 @@ public class MemberClientServiceImpl extends AbstractCrudClientService<Member> i
     public Integer getAvailableCouponCount(String memberId) throws Exception {
         ResponseEntity<Integer> responseEntity = oAuth2RestTemplate.getForEntity(
                 String.format(oAuth2Properties.getGetAvailableCouponCountUrl(), memberId),  Integer.class);
+        return responseEntity.getBody();
+    }
+
+    @Override
+    public MemberLevel getMemberLevel(String memberId) throws Exception {
+        ResponseEntity<MemberLevel> responseEntity = oAuth2RestTemplate.getForEntity(
+                String.format(oAuth2Properties.getMemberLevelUrl(), memberId),  MemberLevel.class);
         return responseEntity.getBody();
     }
 
